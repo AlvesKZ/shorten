@@ -1,31 +1,47 @@
-const shortUrlform = document.getElementById("shortUrlForm")
-const longUrlform = document.getElementById("longUrlForm")
+const shortUrlForm = document.getElementById("shortUrlForm");
+const longUrlForm = document.getElementById("longUrlForm");
 
 const backendUrl = "";
 
-function getShortFormSubmit() {
-    shortUrlform.addEventListener("submit", e => {
+
+function showResult(containerId, text) {
+    const container = document.getElementById(containerId);
+
+    let existingH3 = container.querySelector("h3");
+
+    if (existingH3) {
+        existingH3.innerText = text;
+    } else {
+        const result = document.createElement("h3");
+        result.innerText = text;
+        container.appendChild(result);
+    }
+
+    container.classList.remove("d-none");
+}
+
+
+function handleFormSubmit(form, inputName, resultContainerId, callback) {
+    form.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const longUrl = document.getElementById("longUrl").value;
-        const shortUrl = createShortUrl(longUrl);
+        const value = e.target.elements[inputName].value;
 
-        const shortUrlResult = document.getElementById("shortUrlResult");
+        const result = callback(value);
 
-        let existingH3 = shortUrlResult.querySelector("h3");
-
-        if (existingH3) {
-            existingH3.innerText = shortUrl;
-        } else {
-            const result = document.createElement("h3");
-            result.innerText = shortUrl;
-            shortUrlResult.appendChild(result);
-        }
-
-        shortUrlResult.classList.remove("d-none");
+        showResult(resultContainerId, result);
     });
 }
 
-async function createShortUrl(longUrl) {
-    
+handleFormSubmit(shortUrlForm, "longUrl", "shortUrlResult", createShortUrl);
+handleFormSubmit(longUrlForm, "shortUrl", "longUrlResult", getLongUrl);
+
+
+
+function createShortUrl(longUrl) {
+    return "short.ly/abc123";
+}
+
+function getLongUrl(shortUrl) {
+    return "https://example.com/very/long/url";
 }
