@@ -38,7 +38,7 @@ handleFormSubmit(longUrlForm, "shortUrl", "longUrlResult", getLongUrl);
 
 async function createShortUrl(longUrl) {
   try {
-    const response = await fetch(backendUrl, {
+    const response = await fetch(`${backendUrl}/shorten`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
